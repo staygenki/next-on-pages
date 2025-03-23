@@ -306,11 +306,11 @@ function iifefyFunctionFile(
 	}
 
 	const wrappedContent = `
-		export default ((self, globalThis, global) => {
+		export default ((self, globalThis, global, queueMicrotask) => {
 			${fileContents
 				// the default export needs to become the return value of the iife, which is then re-exported as default
 				.replace(/export\s+default\s+/g, 'return ')}
-		})(proxy, proxy, proxy);
+		})(proxy, proxy, proxy, proxy.queueMicrotask);
 	`;
 
 	const proxyCall = `const proxy = globalThis.__nextOnPagesRoutesIsolation.getProxyFor('${

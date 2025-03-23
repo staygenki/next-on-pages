@@ -52,7 +52,7 @@ function getProxyFor(route: string) {
 function createNewRouteProxy() {
 	const overrides = new Map<string | symbol, unknown>();
 
-	return new Proxy(globalThis, {
+	const proxy = new Proxy(globalThis, {
 		get: (_, property) => {
 			if (overrides.has(property)) {
 				return overrides.get(property);
@@ -68,6 +68,13 @@ function createNewRouteProxy() {
 			return true;
 		},
 	});
+
+	const queueMicrotask = globalThis.queueMicrotask.bind(globalThis)
+	overrides.set("queueMicrotask", (callback: () => void) => {
+		queueMicrotask(callback.bind(proxy))
+	})
+
+	return proxy
 }
 
 /**
