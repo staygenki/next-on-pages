@@ -300,7 +300,7 @@ function iifefyFunctionFile(
 	// actually declare _ENTRIES itself (as it happens in older Vercel CLI version (v31 and older))
 	if (!fileContentsContainEntriesDeclaration) {
 		fileContents = fileContents.replace(
-			/([^.])_ENTRIES/g,
+			/([^.])\b_ENTRIES/g,
 			'$1globalThis._ENTRIES',
 		);
 	}
